@@ -32,7 +32,8 @@ export function Bonuses() {
         ))}
       </div>
       <div className="mt-12">
-        <p className="text-xl text-foreground/90">Leve o método completo + todos os bônus por um preço especial de lançamento.</p>
+        <p className="text-xl text-foreground/90">Leve o método completo + todos os bônus por apenas:</p>
+        <p className="text-5xl font-bold text-green-600 my-4">12x de R$ 24,90</p>
         <Button size="lg" className="mt-6 text-lg h-16 px-10 w-full sm:w-auto animate-pulse">
             Garantir Acesso Imediato
             <ArrowRight className="ml-2 h-5 w-5" />
