@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Activity, ArrowRight, ListChecks, Music, ShieldCheck } from 'lucide-react';
+import { Activity, ArrowRight, ListChecks, Music, ShieldCheck, Zap } from 'lucide-react';
 
 const bonuses = [
     { icon: ListChecks, title: "Checklist Diário de Calma", value: "R$ 49,90" },
@@ -33,7 +33,11 @@ export function Bonuses() {
       </div>
       <div className="mt-12">
         <p className="text-xl text-foreground/90">Leve o método completo + todos os bônus por apenas:</p>
-        <p className="text-5xl font-bold text-green-600 my-4">12x de R$ 24,90</p>
+        <p className="text-4xl font-bold text-green-600 my-2">R$ 24,90</p>
+        <div className="bg-yellow-200/50 text-yellow-800 border-l-4 border-yellow-500 p-3 rounded-md max-w-md mx-auto my-4 text-sm flex items-center justify-center gap-2">
+            <Zap className="h-5 w-5" />
+            <span><span className="font-bold">Oferta Rápida:</span> Os 20 primeiros ganham um guia extra de socialização!</span>
+        </div>
         <Button size="lg" className="mt-6 text-lg h-16 px-10 w-full sm:w-auto animate-pulse">
             Garantir Acesso Imediato
             <ArrowRight className="ml-2 h-5 w-5" />
