@@ -29,6 +29,42 @@
       "description": "Placeholder for the 9:16 video sales letter.",
       "imageUrl": "https://images.unsplash.com/photo-1568393691622-c7ba131d63b4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxkb2clMjBwbGF5aW5nfGVufDB8fHx8MTc2MzU3NTk3NXww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "dog playing"
+    },
+    {
+      "id": "testimonial-4",
+      "description": "Avatar for a testimonial.",
+      "imageUrl": "https://images.unsplash.com/photo-1557053910-d9eadeed1c58?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxwZXJzb24lMjBzbWlsaW5nfGVufDB8fHx8MTc2MzUyMTcyOXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "woman smiling"
+    },
+    {
+      "id": "testimonial-5",
+      "description": "Avatar for a testimonial.",
+      "imageUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxtYW4lMjBzbWlsaW5nfGVufDB8fHx8MTc2NTU1ODg4Nnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "man smiling"
+    },
+    {
+      "id": "testimonial-6",
+      "description": "Avatar for a testimonial.",
+      "imageUrl": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxwZXJzb258ZW58MHx8fHwxNzY1NTU4OTMxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "person"
+    },
+    {
+      "id": "testimonial-7",
+      "description": "Avatar for a testimonial.",
+      "imageUrl": "https://images.unsplash.com/photo-1552058544-f2b08422138a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxwZXJzb258ZW58MHx8fHwxNzY1NTU4OTMxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "person portrait"
+    },
+    {
+      "id": "testimonial-8",
+      "description": "Avatar for a testimonial.",
+      "imageUrl": "https://images.unsplash.com/photo-1548142813-c348350df52b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxwZXJzb258ZW58MHx8fHwxNzY1NTU4OTMxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "woman smiling"
+    },
+    {
+      "id": "testimonial-9",
+      "description": "Avatar for a testimonial.",
+      "imageUrl": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxwZXJzb258ZW58MHx8fHwxNzY1NTU4OTMxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "man portrait"
     }
   ]
 }
