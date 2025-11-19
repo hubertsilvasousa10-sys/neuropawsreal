@@ -17,34 +17,31 @@ import { Logo } from './logo';
 
 const QuizInputSchema = z.object({
   dogName: z.string().min(1, 'O nome do cachorro é obrigatório.'),
-  ownerEmail: z.string().email('Por favor, insira um e-mail válido.'),
   anxiety: z.enum(['Sim, com frequência', 'Às vezes', 'Não'], { required_error: 'Selecione uma opção.' }),
   noiseReaction: z.enum(['Late muito / fica em alerta', 'Apenas observa', 'Não liga'], { required_error: 'Selecione uma opção.' }),
   destructiveBehavior: z.enum(['Sim, demais', 'Raramente', 'Nunca'], { required_error: 'Selecione uma opção.' }),
   vagusNerveKnowledge: z.enum(['Sim', 'Não', 'Não tenho certeza'], { required_error: 'Selecione uma opção.' }),
   timeDedicated: z.enum(['Menos de 10 minutos', '10 a 20 minutos', 'Mais de 20 minutos'], { required_error: 'Selecione uma opção.' }),
   guidedMethodInterest: z.enum(['Sim, quero', 'Talvez', 'Não'], { required_error: 'Selecione uma opção.' }),
+  ownerEmail: z.string().email('Por favor, insira um e-mail válido.'),
 });
 
-const questions = [
+const getQuestions = (dogName: string) => [
   { id: 'dogName', title: 'Qual o nome do seu cachorro?', type: 'text' },
-  { id: 'ownerEmail', title: 'E qual o seu melhor e-mail?', type: 'email' },
-  { id: 'anxiety', title: 'O seu cachorro demonstra ansiedade, agitação ou dificuldade para relaxar?', options: ['Sim, com frequência', 'Às vezes', 'Não'] },
-  { id: 'noiseReaction', title: 'Seu cachorro reage muito a barulhos ou movimentos?', options: ['Late muito / fica em alerta', 'Apenas observa', 'Não liga'] },
-  { id: 'destructiveBehavior', title: 'Ele já destruiu objetos da casa? (sofá, chinelo, móveis…)', options: ['Sim, demais', 'Raramente', 'Nunca'] },
+  { id: 'anxiety', title: `O(a) ${dogName || 'seu cachorro'} demonstra ansiedade, agitação ou dificuldade para relaxar?`, options: ['Sim, com frequência', 'Às vezes', 'Não'] },
+  { id: 'noiseReaction', title: `${dogName || 'Seu cachorro'} reage muito a barulhos ou movimentos?`, options: ['Late muito / fica em alerta', 'Apenas observa', 'Não liga'] },
+  { id: 'destructiveBehavior', title: 'Ele(a) já destruiu objetos da casa? (sofá, chinelo, móveis…)', options: ['Sim, demais', 'Raramente', 'Nunca'] },
   { id: 'vagusNerveKnowledge', title: 'Você já ouviu falar sobre o nervo vago do cachorro?', options: ['Sim', 'Não', 'Não tenho certeza'] },
-  { id: 'timeDedicated', title: 'Quanto tempo por dia você consegue dedicar ao bem-estar do seu cachorro?', options: ['Menos de 10 minutos', '10 a 20 minutos', 'Mais de 20 minutos'] },
-  { id: 'guidedMethodInterest', title: 'Você gostaria de um método guiado passo a passo para deixar seu cachorro calmo e equilibrado?', options: ['Sim, quero', 'Talvez', 'Não'] },
+  { id: 'timeDedicated', title: `Quanto tempo por dia você consegue dedicar ao bem-estar do(a) ${dogName || 'seu cachorro'}?`, options: ['Menos de 10 minutos', '10 a 20 minutos', 'Mais de 20 minutos'] },
+  { id: 'guidedMethodInterest', title: `Você gostaria de um método guiado para deixar ${dogName || 'seu cachorro'} calmo e equilibrado?`, options: ['Sim, quero', 'Talvez', 'Não'] },
+  { id: 'ownerEmail', title: 'Para finalizar, qual o seu melhor e-mail para receber a oferta?', type: 'email' },
 ] as const;
 
 
 export function Quiz() {
   const [step, setStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const currentQuestion = questions[step];
-  const totalQuestions = questions.length;
-
+  
   const form = useForm<z.infer<typeof QuizInputSchema>>({
     resolver: zodResolver(QuizInputSchema),
     defaultValues: {
@@ -52,6 +49,13 @@ export function Quiz() {
       ownerEmail: '',
     },
   });
+
+  const dogName = form.watch('dogName');
+  const questions = getQuestions(dogName);
+
+  const currentQuestion = questions[step];
+  const totalQuestions = questions.length;
+
 
   const onSubmit: SubmitHandler<z.infer<typeof QuizInputSchema>> = async (data) => {
     setIsSubmitting(true);
