@@ -17,24 +17,24 @@ import { Logo } from './logo';
 
 const QuizInputSchema = z.object({
   dogName: z.string().min(1, 'O nome do cachorro é obrigatório.'),
+  ownerEmail: z.string().email('Por favor, insira um e-mail válido.'),
   anxiety: z.enum(['Sim, com frequência', 'Às vezes', 'Não'], { required_error: 'Selecione uma opção.' }),
   noiseReaction: z.enum(['Late muito / fica em alerta', 'Apenas observa', 'Não liga'], { required_error: 'Selecione uma opção.' }),
   destructiveBehavior: z.enum(['Sim, demais', 'Raramente', 'Nunca'], { required_error: 'Selecione uma opção.' }),
   vagusNerveKnowledge: z.enum(['Sim', 'Não', 'Não tenho certeza'], { required_error: 'Selecione uma opção.' }),
   timeDedicated: z.enum(['Menos de 10 minutos', '10 a 20 minutos', 'Mais de 20 minutos'], { required_error: 'Selecione uma opção.' }),
   guidedMethodInterest: z.enum(['Sim, quero', 'Talvez', 'Não'], { required_error: 'Selecione uma opção.' }),
-  ownerEmail: z.string().email('Por favor, insira um e-mail válido.'),
 });
 
 const getQuestions = (dogName: string) => [
-    { id: 'dogName', title: 'Qual o nome do seu cachorro?', type: 'text' },
+    { id: 'dogName', title: 'Primeiro, qual o nome do seu cachorro?', type: 'text' },
     { id: 'anxiety', title: `O(a) ${dogName || 'seu cachorro'} demonstra ansiedade, agitação ou dificuldade para relaxar?`, options: ['Sim, com frequência', 'Às vezes', 'Não'] },
-    { id: 'noiseReaction', title: `${dogName || 'Seu cachorro'} reage muito a barulhos ou movimentos?`, options: ['Late muito / fica em alerta', 'Apenas observa', 'Não liga'] },
+    { id: 'noiseReaction', title: `${dogName ? `Como ${dogName} reage` : 'Como ele reage'} a barulhos ou movimentos (campainha, pessoas chegando, etc)?`, options: ['Late muito / fica em alerta', 'Apenas observa', 'Não liga'] },
     { id: 'destructiveBehavior', title: 'Ele(a) já destruiu objetos da casa? (sofá, chinelo, móveis…)', options: ['Sim, demais', 'Raramente', 'Nunca'] },
-    { id: 'vagusNerveKnowledge', title: 'Você já ouviu falar sobre o nervo vago do cachorro?', options: ['Sim', 'Não', 'Não tenho certeza'] },
-    { id: 'timeDedicated', title: `Quanto tempo por dia você consegue dedicar ao bem-estar do(a) ${dogName || 'seu cachorro'}?`, options: ['Menos de 10 minutos', '10 a 20 minutos', 'Mais de 20 minutos'] },
-    { id: 'guidedMethodInterest', title: `Você gostaria de um método guiado para deixar ${dogName || 'seu cachorro'} calmo e equilibrado?`, options: ['Sim, quero', 'Talvez', 'Não'] },
-    { id: 'ownerEmail', title: 'Para finalizar, qual o seu melhor e-mail para receber a oferta?', type: 'email' },
+    { id: 'vagusNerveKnowledge', title: 'Você já ouviu falar sobre o nervo vago e como ele pode acalmar seu cão?', options: ['Sim', 'Não', 'Não tenho certeza'] },
+    { id: 'timeDedicated', title: `Quanto tempo por dia você consegue dedicar para aplicar um método e acalmar o(a) ${dogName || 'seu cachorro'}?`, options: ['Menos de 10 minutos', '10 a 20 minutos', 'Mais de 20 minutos'] },
+    { id: 'guidedMethodInterest', title: `E você, gostaria de seguir um método claro, passo a passo, para deixar ${dogName || 'seu cachorro'} calmo e equilibrado?`, options: ['Sim, quero', 'Talvez', 'Não'] },
+    { id: 'ownerEmail', title: `Para finalizar, ${dogName}, qual o seu melhor e-mail para receber uma oferta especial?`, type: 'email' },
 ] as const;
 
 
@@ -87,7 +87,7 @@ export function Quiz() {
         <Progress value={progress} className="w-full mt-4" />
       </CardHeader>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
+        <form onSubmit={(e) => e.preventDefault()}>
           <CardContent className="min-h-[220px]">
             {step < totalQuestions && (
               <FormField
@@ -100,7 +100,7 @@ export function Quiz() {
                       {currentQuestion.type === 'text' || currentQuestion.type === 'email' ? (
                         <Input {...field} type={currentQuestion.type} placeholder={`Digite aqui...`} className="max-w-md mx-auto" />
                       ) : (
-                        <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="flex flex-col items-center gap-2">
+                        <RadioGroup onValueChange={field.onChange} defaultValue={field.value} value={field.value} className="flex flex-col items-center gap-2">
                           {currentQuestion.options?.map((option) => (
                             <FormItem key={option} className="w-full max-w-md">
                               <FormControl>
@@ -121,22 +121,22 @@ export function Quiz() {
             )}
           </CardContent>
           <CardFooter className="flex justify-center">
-            {step < totalQuestions - 1 ? (
-              <Button type="button" onClick={handleNextStep} size="lg">
-                Continuar <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            ) : (
-              <Button type="button" onClick={handleNextStep} size="lg" disabled={isSubmitting}>
-                {isSubmitting ? (
+            <Button type="button" onClick={handleNextStep} size="lg" disabled={isSubmitting}>
+              {isSubmitting && step === totalQuestions - 1 ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Analisando...
+                </>
+              ) : (
+                step < totalQuestions - 1 ? (
                   <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Analisando...
+                    Continuar <ArrowRight className="ml-2 h-4 w-4" />
                   </>
                 ) : (
                   "Ver resultado e solução"
-                )}
-              </Button>
-            )}
+                )
+              )}
+            </Button>
           </CardFooter>
         </form>
       </Form>
