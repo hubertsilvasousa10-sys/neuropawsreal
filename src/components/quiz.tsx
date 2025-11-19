@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -34,7 +34,7 @@ const getQuestions = (dogName: string) => [
     { id: 'vagusNerveKnowledge', title: 'Você já ouviu falar sobre o nervo vago e como ele pode acalmar seu cão?', options: ['Sim', 'Não', 'Não tenho certeza'] },
     { id: 'timeDedicated', title: `Quanto tempo por dia você consegue dedicar para aplicar um método e acalmar o(a) ${dogName || 'seu cachorro'}?`, options: ['Menos de 10 minutos', '10 a 20 minutos', 'Mais de 20 minutos'] },
     { id: 'guidedMethodInterest', title: `E você, gostaria de seguir um método claro, passo a passo, para deixar ${dogName || 'seu cachorro'} calmo e equilibrado?`, options: ['Sim, quero', 'Talvez', 'Não'] },
-    { id: 'ownerEmail', title: `Para finalizar, ${dogName}, qual o seu melhor e-mail para receber uma oferta especial?`, type: 'email' },
+    { id: 'ownerEmail', title: `Para finalizar, qual o seu melhor e-mail para receber a análise completa e uma oferta especial?`, type: 'email' },
 ] as const;
 
 
@@ -48,6 +48,7 @@ export function Quiz() {
       dogName: '',
       ownerEmail: '',
     },
+    mode: 'onChange',
   });
 
   const dogName = form.watch('dogName');
@@ -63,20 +64,33 @@ export function Quiz() {
     // The server action handles redirection
   };
   
-  const handleNextStep = async () => {
-    const field = currentQuestion.id;
-    const isValid = await form.trigger(field);
-    if (isValid) {
-      if (step < totalQuestions - 1) {
-        setStep((prev) => prev + 1);
-      } else {
-        // This is the last step, so we submit the form
-        form.handleSubmit(onSubmit)();
-      }
+  const goToNextStep = () => {
+    if (step < totalQuestions - 1) {
+      setStep((prev) => prev + 1);
+    } else {
+      form.handleSubmit(onSubmit)();
     }
   };
 
-  const progress = ((step + 1) / totalQuestions) * 100;
+  const handleNextStepClick = async () => {
+    const field = currentQuestion.id;
+    const isValid = await form.trigger(field);
+    if (isValid) {
+      goToNextStep();
+    }
+  };
+
+  const handleRadioChange = (value: string) => {
+    const field = currentQuestion.id;
+    // @ts-ignore
+    form.setValue(field, value, { shouldValidate: true });
+    setTimeout(() => {
+        goToNextStep();
+    }, 200);
+  }
+
+  const progress = ((step) / (totalQuestions - 1)) * 100;
+  const showButton = currentQuestion.type === 'text' || currentQuestion.type === 'email';
 
   return (
     <Card className="w-full max-w-xl shadow-2xl">
@@ -87,7 +101,7 @@ export function Quiz() {
         <Progress value={progress} className="w-full mt-4" />
       </CardHeader>
       <Form {...form}>
-        <form onSubmit={(e) => e.preventDefault()}>
+        <form onSubmit={(e) => { e.preventDefault(); if(showButton) handleNextStepClick(); }}>
           <CardContent className="min-h-[220px]">
             {step < totalQuestions && (
               <FormField
@@ -95,12 +109,12 @@ export function Quiz() {
                 name={currentQuestion.id}
                 render={({ field }) => (
                   <FormItem className="space-y-4">
-                    <FormLabel className="text-lg text-center block font-semibold">{currentQuestion.title}</FormLabel>
+                    <FormLabel className="text-lg text-center block font-semibold">{currentQuestion.title.replace('{dogName}', dogName || 'seu cachorro')}</FormLabel>
                     <FormControl>
                       {currentQuestion.type === 'text' || currentQuestion.type === 'email' ? (
                         <Input {...field} type={currentQuestion.type} placeholder={`Digite aqui...`} className="max-w-md mx-auto" />
                       ) : (
-                        <RadioGroup onValueChange={field.onChange} defaultValue={field.value} value={field.value} className="flex flex-col items-center gap-2">
+                        <RadioGroup onValueChange={handleRadioChange} value={field.value} className="flex flex-col items-center gap-2">
                           {currentQuestion.options?.map((option) => (
                             <FormItem key={option} className="w-full max-w-md">
                               <FormControl>
@@ -120,23 +134,25 @@ export function Quiz() {
               />
             )}
           </CardContent>
-          <CardFooter className="flex justify-center">
-            <Button type="button" onClick={handleNextStep} size="lg" disabled={isSubmitting}>
-              {isSubmitting && step === totalQuestions - 1 ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Analisando...
-                </>
-              ) : (
-                step < totalQuestions - 1 ? (
-                  <>
-                    Continuar <ArrowRight className="ml-2 h-4 w-4" />
-                  </>
+          <CardFooter className="flex justify-center h-16">
+            {showButton && (
+                <Button type="submit" size="lg" disabled={isSubmitting}>
+                {isSubmitting && step === totalQuestions - 1 ? (
+                    <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Analisando...
+                    </>
                 ) : (
-                  "Ver resultado e solução"
-                )
-              )}
-            </Button>
+                    step < totalQuestions - 1 ? (
+                    <>
+                        Continuar <ArrowRight className="ml-2 h-4 w-4" />
+                    </>
+                    ) : (
+                    "Ver resultado e solução"
+                    )
+                )}
+                </Button>
+            )}
           </CardFooter>
         </form>
       </Form>
