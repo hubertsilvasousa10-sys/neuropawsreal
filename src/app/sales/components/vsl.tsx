@@ -1,3 +1,5 @@
+'use client';
+
 export function VSL() {
   return (
     <section className="flex flex-col items-center text-center">
