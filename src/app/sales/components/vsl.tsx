@@ -19,8 +19,9 @@ export function VSL() {
               referrerPolicy="origin"
               onLoad={(e) => {
                 const target = e.target as HTMLIFrameElement;
-                target.onload = null;
-                target.src = 'https://scripts.converteai.net/9acdea39-985e-40dc-92fd-96bd657faa49/players/69024ccb8687c6f8d6f2a443/v4/embed.html' + (location.search || '?') + '&vl=' + encodeURIComponent(location.href);
+                if(target.src === 'about:blank') {
+                  target.src = 'https://scripts.converteai.net/9acdea39-985e-40dc-92fd-96bd657faa49/players/69024ccb8687c6f8d6f2a443/v4/embed.html' + (location.search || '?') + '&vl=' + encodeURIComponent(location.href);
+                }
               }}
             ></iframe>
           </div>
