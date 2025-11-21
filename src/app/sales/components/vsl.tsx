@@ -7,7 +7,7 @@ export function VSL() {
       <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
         Assista ao vídeo abaixo para entender como nosso método inovador pode transformar o comportamento do seu cachorro em poucos dias.
       </p>
-      <div className="mt-8 w-full max-w-md mx-auto">
+      <div className="mt-8 w-full max-w-4xl mx-auto">
         <div id="ifr_69024ccb8687c6f8d6f2a443_wrapper" style={{ margin: '0 auto', width: '100%', maxWidth: '400px' }}>
           <div style={{ position: 'relative', padding: '177.77777777777777% 0 0 0' }} id="ifr_69024ccb8687c6f8d6f2a443_aspect">
             <iframe
