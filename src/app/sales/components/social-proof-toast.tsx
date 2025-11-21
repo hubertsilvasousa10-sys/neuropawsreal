@@ -64,7 +64,7 @@ export function SocialProofToast() {
     const initialTimeout = setTimeout(showNotification, 4000);
 
     // Then show subsequent notifications at intervals
-    const interval = setInterval(showNotification, getRandomInt(8000, 15000)); // Every 8-15 seconds
+    const interval = setInterval(showNotification, 38000); // Every 38 seconds
 
     return () => {
         clearTimeout(initialTimeout);
