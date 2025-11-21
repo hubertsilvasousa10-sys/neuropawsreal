@@ -38,6 +38,24 @@ export default function RootLayout({
             src="https://www.facebook.com/tr?id=671576132499691&ev=PageView&noscript=1"
           />
         </noscript>
+        <Script id="utmify-pixel" strategy="afterInteractive">
+          {`
+            window.pixelId = "69140d9e2f1c81153213e467";
+            var a = document.createElement("script");
+            a.setAttribute("async", "");
+            a.setAttribute("defer", "");
+            a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
+            document.head.appendChild(a);
+          `}
+        </Script>
+        <Script
+          src="https://cdn.utmify.com.br/scripts/utms/latest.js"
+          data-utmify-prevent-xcod-sck
+          data-utmify-prevent-subids
+          async
+          defer
+          strategy="afterInteractive"
+        ></Script>
       </head>
       <body className="font-body antialiased">
         {children}
