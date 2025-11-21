@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -37,6 +37,7 @@ const getQuestions = (dogName: string) => [
     { id: 'ownerEmail', title: `Para finalizar, qual o seu melhor e-mail para receber a análise completa e uma oferta especial?`, type: 'email' },
 ] as const;
 
+const commonEmailDomains = ['gmail.com', 'hotmail.com', 'outlook.com', 'yahoo.com'];
 
 export function Quiz() {
   const [step, setStep] = useState(0);
@@ -52,6 +53,7 @@ export function Quiz() {
   });
 
   const dogName = form.watch('dogName');
+  const ownerEmail = form.watch('ownerEmail');
   const questions = getQuestions(dogName);
 
   const currentQuestion = questions[step];
@@ -89,6 +91,13 @@ export function Quiz() {
     }, 200);
   }
 
+  const handleEmailDomainClick = (domain: string) => {
+    const currentEmail = form.getValues('ownerEmail');
+    const atIndex = currentEmail.indexOf('@');
+    const baseEmail = atIndex !== -1 ? currentEmail.substring(0, atIndex) : currentEmail;
+    form.setValue('ownerEmail', `${baseEmail}@${domain}`, { shouldValidate: true, shouldDirty: true });
+  }
+
   const progress = ((step) / (totalQuestions - 1)) * 100;
   const showButton = currentQuestion.type === 'text' || currentQuestion.type === 'email';
 
@@ -112,7 +121,25 @@ export function Quiz() {
                     <FormLabel className="text-lg text-center block font-semibold">{currentQuestion.title.replace('{dogName}', dogName || 'seu cachorro')}</FormLabel>
                     <FormControl>
                       {currentQuestion.type === 'text' || currentQuestion.type === 'email' ? (
-                        <Input {...field} type={currentQuestion.type} placeholder={`Digite aqui...`} className="max-w-md mx-auto" />
+                        <div className="max-w-md mx-auto">
+                          <Input {...field} type={currentQuestion.type} placeholder={`Digite aqui...`} />
+                           {currentQuestion.id === 'ownerEmail' && ownerEmail && !ownerEmail.includes('@') && (
+                            <div className="flex flex-wrap gap-2 mt-2 justify-center">
+                              {commonEmailDomains.map((domain) => (
+                                <Button
+                                  key={domain}
+                                  type="button"
+                                  variant="outline"
+                                  size="sm"
+                                  className="text-xs h-auto py-1 px-2"
+                                  onClick={() => handleEmailDomainClick(domain)}
+                                >
+                                  @{domain}
+                                </Button>
+                              ))}
+                            </div>
+                          )}
+                        </div>
                       ) : (
                         <RadioGroup onValueChange={handleRadioChange} value={field.value} className="flex flex-col items-center gap-2">
                           {currentQuestion.options?.map((option) => (
