@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -12,7 +13,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Progress } from '@/components/ui/progress';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { submitQuiz } from '@/app/actions';
+import { getPersonalizedRecommendations, type QuizInput } from '@/ai/flows/personalized-recommendations';
 import { Logo } from './logo';
 
 const QuizInputSchema = z.object({
@@ -42,6 +43,7 @@ const commonEmailDomains = ['gmail.com', 'hotmail.com', 'outlook.com', 'yahoo.co
 export function Quiz() {
   const [step, setStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter();
   
   const form = useForm<z.infer<typeof QuizInputSchema>>({
     resolver: zodResolver(QuizInputSchema),
@@ -60,10 +62,17 @@ export function Quiz() {
   const totalQuestions = questions.length;
 
 
-  const onSubmit: SubmitHandler<z.infer<typeof QuizInputSchema>> = async (data) => {
+  const onSubmit: SubmitHandler<QuizInput> = async (data) => {
     setIsSubmitting(true);
-    await submitQuiz(data);
-    // The server action handles redirection
+    try {
+      const result = await getPersonalizedRecommendations(data);
+      const recommendation = result.recommendation;
+      router.push(`/sales?recommendation=${encodeURIComponent(recommendation)}`);
+    } catch (error) {
+      console.error('Error submitting quiz:', error);
+      // Redirect to sales page even if AI fails, but without recommendation
+      router.push('/sales');
+    }
   };
   
   const goToNextStep = () => {
