@@ -99,7 +99,9 @@ export function Quiz() {
   }
 
   const progress = ((step) / (totalQuestions - 1)) * 100;
-  const showButton = currentQuestion.type === 'text' || currentQuestion.type === 'email';
+  const showButton =
+    "type" in currentQuestion &&
+    (currentQuestion.type === "text" || currentQuestion.type === "email");
 
   return (
     <Card className="w-full max-w-xl shadow-2xl">
@@ -120,7 +122,7 @@ export function Quiz() {
                   <FormItem className="space-y-4">
                     <FormLabel className="text-lg text-center block font-semibold">{currentQuestion.title.replace('{dogName}', dogName || 'seu cachorro')}</FormLabel>
                     <FormControl>
-                      {currentQuestion.type === 'text' || currentQuestion.type === 'email' ? (
+                      {('type' in currentQuestion && (currentQuestion.type === 'text' || currentQuestion.type === 'email')) ? (
                         <div className="max-w-md mx-auto">
                           <Input {...field} type={currentQuestion.type} placeholder={`Digite aqui...`} />
                            {currentQuestion.id === 'ownerEmail' && ownerEmail && !ownerEmail.includes('@') && (
@@ -142,7 +144,7 @@ export function Quiz() {
                         </div>
                       ) : (
                         <RadioGroup onValueChange={handleRadioChange} value={field.value} className="flex flex-col items-center gap-2">
-                          {currentQuestion.options?.map((option) => (
+                          {'options' in currentQuestion && currentQuestion.options?.map((option) => (
                             <FormItem key={option} className="w-full max-w-md">
                               <FormControl>
                                 <RadioGroupItem value={option} id={option} className="sr-only" />
