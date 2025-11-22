@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Activity, ArrowRight, ListChecks, Music, ShieldCheck, Zap } from 'lucide-react';
+import { CheckoutButton } from './checkout-button';
 
 const bonuses = [
     { icon: ListChecks, title: "Checklist Diário de Calma", value: "R$ 49,90" },
@@ -38,12 +39,9 @@ export function Bonuses() {
             <Zap className="h-5 w-5" />
             <span><span className="font-bold">Oferta Rápida:</span> Os 20 primeiros ganham um guia extra de socialização!</span>
         </div>
-        <a href="https://www.ggcheckout.com/checkout/v2/fHqGK66FnlMMhMb6APyn">
-            <Button size="lg" className="mt-6 text-lg h-16 px-10 w-full sm:w-auto animate-pulse">
-                Garantir Acesso Imediato
-                <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-        </a>
+        <CheckoutButton className="mt-6 text-lg h-16 px-10 w-full sm:w-auto animate-pulse">
+            Garantir Acesso Imediato
+        </CheckoutButton>
         <div className="flex items-center justify-center gap-4 text-xs text-muted-foreground mt-4">
             <div className="flex items-center gap-1">
                 <ShieldCheck className="h-4 w-4 text-green-500" />
