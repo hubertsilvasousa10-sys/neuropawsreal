@@ -67,11 +67,13 @@ export function Quiz() {
     try {
       const result = await getPersonalizedRecommendations(data);
       const recommendation = result.recommendation;
-      router.push(`/sales?recommendation=${encodeURIComponent(recommendation)}`);
+      router.push(`/sales/?recommendation=${encodeURIComponent(recommendation)}`);
+      
     } catch (error) {
       console.error('Error submitting quiz:', error);
       // Redirect to sales page even if AI fails, but without recommendation
-      router.push('/sales');
+      router.push('/sales/');
+      
     }
   };
   
