@@ -16,6 +16,12 @@ import { CTA } from './components/cta';
 import { Recommendation } from './components/recommendation';
 import { SocialProofToast } from './components/social-proof-toast';
 import { Logo } from '@/components/logo';
+import { redirect } from 'next/navigation';
+
+export default function Home() {
+  redirect('/sales');
+}
+
 
 function SalesPageContent() {
   const searchParams = useSearchParams();
