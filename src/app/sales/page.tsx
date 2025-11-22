@@ -2,7 +2,7 @@
 'use client';
 
 import { Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, redirect } from 'next/navigation';
 
 import { Header } from './components/header';
 import { Hero } from './components/hero';
@@ -16,14 +16,13 @@ import { CTA } from './components/cta';
 import { Recommendation } from './components/recommendation';
 import { SocialProofToast } from './components/social-proof-toast';
 import { Logo } from '@/components/logo';
-import { redirect } from 'next/navigation';
 
-export default function Home() {
+// REMOVIDO O PRIMEIRO EXPORT DEFAULT
+function HomeRedirect() {
   redirect('/sales');
 }
 
-
-function SalesPageContent() {
+function SalesPageContent(props: any) {
   const searchParams = useSearchParams();
   const recommendation = searchParams.get('recommendation');
 
@@ -31,6 +30,7 @@ function SalesPageContent() {
     <div className="bg-background text-foreground">
       <Header />
       <SocialProofToast />
+
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
         <div className="space-y-16 md:space-y-24">
           <Hero />
@@ -44,6 +44,7 @@ function SalesPageContent() {
           <CTA />
         </div>
       </main>
+
       <footer className="py-8 text-center text-muted-foreground">
         <div className="container">
           <Logo className="justify-center mb-4" />
@@ -54,11 +55,13 @@ function SalesPageContent() {
   );
 }
 
-// This is the main component for the page, which uses Suspense
-export default function SalesPage() {
+// AGORA SIM — APENAS UM EXPORT DEFAULT CORRETO
+export default function Page(props: any) {
   return (
-    <Suspense fallback={<div className="flex h-dvh items-center justify-center">Carregando página...</div>}>
-      <SalesPageContent />
+    <Suspense fallback={<div>Carregando...</div>}>
+      <SalesPageContent {...props} />
     </Suspense>
   );
 }
+
+
