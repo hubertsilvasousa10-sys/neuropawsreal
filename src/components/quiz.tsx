@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -42,7 +42,7 @@ const commonEmailDomains = ['gmail.com', 'hotmail.com', 'outlook.com', 'yahoo.co
 
 export function Quiz() {
   const [step, setStep] = useState(0);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isPending, startTransition] = useTransition();
   const router = useRouter();
   
   const form = useForm<z.infer<typeof QuizInputSchema>>({
@@ -63,18 +63,17 @@ export function Quiz() {
 
 
   const onSubmit: SubmitHandler<QuizInput> = async (data) => {
-    setIsSubmitting(true);
-    try {
-      const result = await getPersonalizedRecommendations(data);
-      const recommendation = result.recommendation;
-      router.push(`/sales/?recommendation=${encodeURIComponent(recommendation)}`);
-      
-    } catch (error) {
-      console.error('Error submitting quiz:', error);
-      // Redirect to sales page even if AI fails, but without recommendation
-      router.push('/sales/');
-      
-    }
+    startTransition(async () => {
+      try {
+        const result = await getPersonalizedRecommendations(data);
+        const recommendation = result.recommendation;
+        router.push(`/sales/?recommendation=${encodeURIComponent(recommendation)}`);
+      } catch (error) {
+        console.error('Error submitting quiz:', error);
+        // Redirect to sales page even if AI fails, but without recommendation
+        router.push('/sales/');
+      }
+    });
   };
   
   const goToNextStep = () => {
@@ -176,8 +175,8 @@ export function Quiz() {
           </CardContent>
           <CardFooter className="flex justify-center h-16">
             {showButton && (
-                <Button type="submit" size="lg" disabled={isSubmitting}>
-                {isSubmitting && step === totalQuestions - 1 ? (
+                <Button type="submit" size="lg" disabled={isPending}>
+                {isPending && step === totalQuestions - 1 ? (
                     <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     Analisando...
